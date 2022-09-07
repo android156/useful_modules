@@ -7,32 +7,12 @@
 
 
 import platform
-from subprocess import call, Popen, PIPE
+from subprocess import Popen, PIPE
 import chardet
 import ipaddress
 import socket
 import threading
-
 from tabulate import tabulate
-
-
-# for url in ["google.com", "a"]:
-#     param = "-n" if platform.system().lower() == 'windows' else "-c"
-#     command = ["ping", param, "2", url]
-#     process = Popen(command, stdout=PIPE, stderr=PIPE)
-#
-#     # communicate - связь с созданным процессом
-#     # None – это результат stderr, а это значит, что ошибок не найдено
-#     stdout_data, stderr_data = process.communicate()
-#     print('stdout_data: ', stdout_data)
-#     print('stderr_data: ', stderr_data)
-#
-#     result = chardet.detect(stdout_data)
-#     if result['encoding'] is not None:
-#         out = stdout_data.decode(result.get('encoding', None))
-#         print(out)
-#
-#     print(50 * '=')
 
 
 def decrypt_data(encrypted_data):
@@ -65,12 +45,13 @@ def host_ping(host_list):
             host_ip = ipaddress.ip_address(socket.gethostbyname(host))
         except socket.gaierror:
             host_ip = 'Отсутствует'
-        availability = threads[i].join()
+        threads[i].join()
         print(f'Поток {i + 1} завершен.')
         result_table.append((host_name, host_ip, availabilities[i]))
     return result_table
 
 
-host_list = ['yandex.ru', 'google.com', '8.8.8.8', 'instagram.com', 'aaa']
+host_list = ['yandex.ru', 'google.com', '8.8.8.8', 'instagram.com', 'aaa', 123]
+host_list = [str(el) for el in host_list]
 print(tabulate(host_ping(host_list), headers='firstrow'))
 
